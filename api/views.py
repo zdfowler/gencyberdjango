@@ -31,6 +31,17 @@ class LikeViewSet(viewsets.ModelViewSet):
 	queryset = Like.objects.all()
 	serializer_class = LikeSerializer
 
+	def create(self, request):
+		serializer = self.get_serializer(data=request.data)
+		if serializer.is_valid():
+			serializer.save()
+			print str(serializer.data)
+			profile, created = Userprofile.objects.get_or_create(user__id=int(serializer.data['user']))
+			profile.likes.add(serializer.data['id'])
+			return Response(serializer.data, status=status.HTTP_201_CREATED)
+		else:
+			return Response(serializer.errors)
+
 class UserprofileViewSet(viewsets.ModelViewSet):
 	"""
 	API endpoint that allows users to be viewed.

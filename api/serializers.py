@@ -12,7 +12,7 @@ class UserSerializer(serializers.ModelSerializer):
 class LikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Like
-        fields = ('id', 'title', 'objid', 'farm', 'secret', 'server')
+        fields = ('id', 'user', 'title', 'objid', 'farm', 'secret', 'server')
 
 class UserprofileSerializer(serializers.ModelSerializer):
 	user = UserSerializer()
