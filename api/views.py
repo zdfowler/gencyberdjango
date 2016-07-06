@@ -15,6 +15,7 @@ from rest_framework import status
 
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.permissions import *
+from rest_framework.decorators import *
 
 class Session(APIView):
 	permission_classes = (AllowAny,)
@@ -67,3 +68,17 @@ class UserViewSet(viewsets.ModelViewSet):
 	"""
 	queryset = User.objects.all()
 	serializer_class = UserSerializer
+
+class LikeViewSet(viewsets.ModelViewSet):
+	"""
+	API endpoint that allows users to be viewed.
+	"""
+	queryset = Like.objects.all()
+	serializer_class = LikeSerializer
+
+class UserprofileViewSet(viewsets.ModelViewSet):
+	"""
+	API endpoint that allows users to be viewed.
+	"""
+	queryset = Userprofile.objects.all()
+	serializer_class = UserprofileSerializer

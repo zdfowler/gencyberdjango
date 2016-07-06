@@ -8,3 +8,13 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'url')
+
+class LikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Like
+        fields = ('id', 'title', 'objid', 'farm', 'secret', 'server')
+
+class UserprofileSerializer(serializers.HyperlinkedModelSerializer):
+	class Meta:
+		model = Userprofile
+		fields = ('id', 'user', 'likes')
