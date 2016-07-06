@@ -14,7 +14,9 @@ class LikeSerializer(serializers.ModelSerializer):
         model = Like
         fields = ('id', 'title', 'objid', 'farm', 'secret', 'server')
 
-class UserprofileSerializer(serializers.HyperlinkedModelSerializer):
+class UserprofileSerializer(serializers.ModelSerializer):
+	user = UserSerializer()
 	class Meta:
 		model = Userprofile
 		fields = ('id', 'user', 'likes')
+		depth = 1
