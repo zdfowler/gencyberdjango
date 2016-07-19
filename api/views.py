@@ -48,3 +48,47 @@ class UserprofileViewSet(viewsets.ModelViewSet):
 	"""
 	queryset = Userprofile.objects.all()
 	serializer_class = UserprofileSerializer
+
+def home(request):
+  """
+  Send requests to / to the ember.js clientside app  
+  """
+
+  return render_to_response('index.html',
+                {}, RequestContext(request))
+
+class Session(APIView):
+	permission_classes = (AllowAny,)
+	def form_response(self, isauthenticated, userid, username, error=""):
+		data = {
+			'isauthenticated': isauthenticated,
+			'userid': userid,
+			'username': username
+		}
+		if error:
+			data['message'] = error
+
+		return Response(data)
+
+	def get(self, request, *args, **kwargs):
+		# Get the current user
+		if request.user.is_authenticated():
+			return self.form_response(True, request.user.id, request.user.username)
+		return self.form_response(False, None, None)
+
+	def post(self, request, *args, **kwargs):
+		# Login
+		username = request.POST.get('username')
+		password = request.POST.get('password')
+		user = authenticate(username=username, password=password)
+		if user is not None:
+			if user.is_active:
+				login(request, user)
+				return self.form_response(True, user.id, user.username)
+			return self.form_response(False, None, None, "Account is suspended")
+		return self.form_response(False, None, None, "Invalid username or password")
+
+	def delete(self, request, *args, **kwargs):
+		# Logout
+		logout(request)
+		return Response(status=status.HTTP_204_NO_CONTENT)
